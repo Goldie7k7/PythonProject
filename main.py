@@ -31,6 +31,8 @@ def SIGNUP():
             passwordMain = tk.Entry(table)
             passWORD.pack()
             passwordMain.pack()
+            Submit = tk.Button(table,text="Submit",command=submit)
+            Submit.pack()
             cur.execute(f'''
                 CREATE TABLE IF NOT EXISTS {user}(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,8 +52,10 @@ def SIGNUP():
             table.configure(bg='white')
             Data_Title = tk.Label(table,text="Your Data:",font=('Arial',30))
             New_Entry = tk.Button(table,text="New",command=newPASS)
+            View = tk.Button(table)
             Data_Title.pack()
             New_Entry.pack()
+            View.pack()
 
             c.execute('''
             INSERT INTO users(username,password)
@@ -107,6 +111,13 @@ def LOGIN():
             passwordMain = tk.Entry(table)
             passWORD.pack()
             passwordMain.pack()
+
+            def submit():
+                cur.execute('''INSERT INTO {user}(website,username,password)
+                                VALUES(?,?,?)''',())
+
+            Submit = tk.Button(table,text="Submit",command=submit)
+            Submit.pack()
             cur.execute(f'''
                 CREATE TABLE IF NOT EXISTS {user}(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -127,8 +138,10 @@ def LOGIN():
             table.configure(bg='white')
             Data_Title = tk.Label(table,text="Your Data:",font=('Arial',30))
             New_Entry = tk.Button(table,text="New",command=newPASS)
+            View = tk.Button(table,text="View")
             Data_Title.pack()
             New_Entry.pack()
+            View.pack()
         else:
             messagebox.showerror("Error",'Incorrect username or password')
     main.destroy()
