@@ -14,10 +14,22 @@ password BLOB NOT NULL)''')
 
 main = tk.Tk()
 
+
 def SIGNUP():
     def signupverify():
         user = username_entry.get()
         passkey = password_entry.get()
+
+        def newPASS():
+            con = sql.connect('Passwords.db')
+            cur = con.cursor()
+            cur.execute(f'''
+                CREATE TABLE IF NOT EXISTS {user}(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                website TEXT NOT NULL,
+                username TEXT NOT NULL,
+                password TEXT NOT NULL
+            )''')
 
         if user == '' and passkey == '':
             messagebox.showerror('Error','Fields cannot be empty.')
@@ -29,7 +41,9 @@ def SIGNUP():
             table = tk.Tk()
             table.configure(bg='white')
             Data_Title = tk.Label(table,text="Your Data:",font=('Arial',30))
+            New_Entry = tk.Button(table,text="New",command=newPASS)
             Data_Title.pack()
+            New_Entry.pack()
 
             c.execute('''
             INSERT INTO users(username,password)
@@ -74,6 +88,17 @@ def LOGIN():
         user = username_entry.get()
         passkey = password_entry.get()
 
+        def newPASS():
+            con = sql.connect('Passwords.db')
+            cur = con.cursor()
+            cur.execute(f'''
+                CREATE TABLE IF NOT EXISTS {user}(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                website TEXT NOT NULL,
+                username TEXT NOT NULL,
+                password TEXT NOT NULL
+            )''')
+
         c.execute('SELECT 1 FROM users WHERE username = ? AND password = ? LIMIT 1', (user, passkey))
         resultuser = c.fetchone() is not None
 
@@ -85,7 +110,9 @@ def LOGIN():
             table = tk.Tk()
             table.configure(bg='white')
             Data_Title = tk.Label(table,text="Your Data:",font=('Arial',30))
+            New_Entry = tk.Button(table,text="New",command=newPASS)
             Data_Title.pack()
+            New_Entry.pack()
         else:
             messagebox.showerror("Error",'Incorrect username or password')
     main.destroy()
