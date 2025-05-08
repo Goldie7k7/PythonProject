@@ -23,6 +23,14 @@ def SIGNUP():
         def newPASS():
             con = sql.connect('Passwords.db')
             cur = con.cursor()
+            website = tk.Entry(table)
+            web = tk.Label(table,text="Website:")
+            web.pack()            
+            website.pack()
+            passWORD = tk.Label(table,text="Password:")
+            passwordMain = tk.Entry(table)
+            passWORD.pack()
+            passwordMain.pack()
             cur.execute(f'''
                 CREATE TABLE IF NOT EXISTS {user}(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,10 +38,6 @@ def SIGNUP():
                 username TEXT NOT NULL,
                 password TEXT NOT NULL
             )''')
-            website = tk.Entry(table)
-            website.pack()
-            passwordMain = tk.Entry(table)
-            passwordMain.pack()
 
         if user == '' and passkey == '':
             messagebox.showerror('Error','Fields cannot be empty.')
@@ -54,7 +58,7 @@ def SIGNUP():
             VALUES(?,?)''',(user,passkey))
             conn.commit()
             conn.close()
-
+            table.mainloop()
 
         else:
             messagebox.showerror("Error",'Incorrect username or password')
@@ -95,6 +99,14 @@ def LOGIN():
         def newPASS():
             con = sql.connect('Passwords.db')
             cur = con.cursor()
+            website = tk.Entry(table)
+            web = tk.Label(table,text="Website:")
+            web.pack()            
+            website.pack()
+            passWORD = tk.Label(table,text="Password:")
+            passwordMain = tk.Entry(table)
+            passWORD.pack()
+            passwordMain.pack()
             cur.execute(f'''
                 CREATE TABLE IF NOT EXISTS {user}(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
