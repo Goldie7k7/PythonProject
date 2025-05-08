@@ -43,6 +43,9 @@ def SIGNUP():
                 cur.execute(f'''INSERT INTO {user}
                             (website,username,password)
                                 VALUES(?,?,?)''',(WEBSITE,USERNAME,PASSWORD))
+                website.delete(0,'end')
+                usernameMain.delete(0,'end')
+                passwordMain.delete(0,'end')                                
                 con.commit()
                 con.close()            
 
@@ -67,7 +70,7 @@ def SIGNUP():
             table.configure(bg='white')
             Data_Title = tk.Label(table,text="Your Data:",font=('Arial',30))
             New_Entry = tk.Button(table,text="New",command=newPASS)
-            View = tk.Button(table)
+            View = tk.Button(table,text="View")
             Data_Title.pack()
             New_Entry.pack()
             View.pack()
@@ -138,7 +141,9 @@ def LOGIN():
                 cur.execute(f'''INSERT INTO {user}
                             (website,username,password)
                                 VALUES(?,?,?)''',(WEBSITE,USERNAME,PASSWORD))
-
+                website.delete(0,'end')
+                usernameMain.delete(0,'end')
+                passwordMain.delete(0,'end')
                 con.commit()
                 con.close()                                
 
