@@ -57,14 +57,18 @@ def SIGNUP():
                 WEBSITE = website.get()
                 USERNAME = usernameMain.get()
                 PASSWORD = passwordMain.get()
-                cur.execute(f'''INSERT INTO {user}
-                            (website,username,password)
-                                VALUES(?,?,?)''',(WEBSITE,USERNAME,PASSWORD))
-                website.delete(0,'end')
-                usernameMain.delete(0,'end')
-                passwordMain.delete(0,'end')                                
-                con.commit()
-                con.close()    
+
+                if WEBSITE and USERNAME and PASSWORD:
+                    cur.execute(f'''INSERT INTO {user}
+                                (website,username,password)
+                                    VALUES(?,?,?)''',(WEBSITE,USERNAME,PASSWORD))
+                    website.delete(0,'end')
+                    usernameMain.delete(0,'end')
+                    passwordMain.delete(0,'end')                                
+                    con.commit()
+                else:
+                    messagebox.showwarning("Missing Info","Please fill all fields")
+                 
             
 
             Submit = tk.Button(table,text="Submit",command=submit)
@@ -174,14 +178,18 @@ def LOGIN():
                 WEBSITE = website.get()
                 USERNAME = usernameMain.get()
                 PASSWORD = passwordMain.get()
-                cur.execute(f'''INSERT INTO {user}
-                            (website,username,password)
-                                VALUES(?,?,?)''',(WEBSITE,USERNAME,PASSWORD))
-                website.delete(0,'end')
-                usernameMain.delete(0,'end')
-                passwordMain.delete(0,'end')                                
-                con.commit()
-                con.close()    
+
+                if WEBSITE and USERNAME and PASSWORD:
+                    cur.execute(f'''INSERT INTO {user}
+                                (website,username,password)
+                                    VALUES(?,?,?)''',(WEBSITE,USERNAME,PASSWORD))
+                    website.delete(0,'end')
+                    usernameMain.delete(0,'end')
+                    passwordMain.delete(0,'end')                                
+                    con.commit()
+                else:
+                    messagebox.showwarning("Missing Info","Please fill all fields")
+    
 
             Submit = tk.Button(table,text="Submit",command=submit)
             Submit.pack()
