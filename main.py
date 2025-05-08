@@ -135,17 +135,8 @@ def LOGIN():
             passwordMain.pack()
 
             def submit():
-                WEBSITE = website.get()
-                USERNAME = usernameMain.get()
-                PASSWORD = passwordMain.get()
-                cur.execute(f'''INSERT INTO {user}
-                            (website,username,password)
-                                VALUES(?,?,?)''',(WEBSITE,USERNAME,PASSWORD))
-                website.delete(0,'end')
-                usernameMain.delete(0,'end')
-                passwordMain.delete(0,'end')
-                con.commit()
-                con.close()                                
+                cur.execute('''INSERT INTO {user}(website,username,password)
+                                VALUES(?,?,?)''',())
 
             Submit = tk.Button(table,text="Submit",command=submit)
             Submit.pack()
