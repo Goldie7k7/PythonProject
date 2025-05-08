@@ -68,9 +68,6 @@ def SIGNUP():
     button.pack(pady=20)
 
     window.mainloop()
-   
-
-#c.execute("SELECT * FROM users WHERE password=?",(passkey)
 
 def LOGIN():
     def loginverify():
