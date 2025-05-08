@@ -42,7 +42,9 @@ def SIGNUP():
                 PASSWORD = passwordMain.get()
                 cur.execute(f'''INSERT INTO {user}
                             (website,username,password)
-                                VALUES(?,?,?)''',(WEBSITE,USERNAME,PASSWORD))            
+                                VALUES(?,?,?)''',(WEBSITE,USERNAME,PASSWORD))
+                con.commit()
+                con.close()            
 
             Submit = tk.Button(table,text="Submit",command=submit)
             Submit.pack()
@@ -136,6 +138,9 @@ def LOGIN():
                 cur.execute(f'''INSERT INTO {user}
                             (website,username,password)
                                 VALUES(?,?,?)''',(WEBSITE,USERNAME,PASSWORD))
+
+                con.commit()
+                con.close()                                
 
             Submit = tk.Button(table,text="Submit",command=submit)
             Submit.pack()
