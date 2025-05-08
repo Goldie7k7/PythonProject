@@ -13,7 +13,7 @@ password BLOB NOT NULL)''')
 
 
 main = tk.Tk()
-
+tree = None
 
 def SIGNUP():
     def signupverify():
@@ -21,6 +21,9 @@ def SIGNUP():
         passkey = password_entry.get()
        
         def Viewer():
+            global tree
+            if tree is not None:
+                return
             con = sql.connect('Passwords.db')
             cur = con.cursor()
             cur.execute(f"SELECT * FROM {user}")
@@ -66,6 +69,9 @@ def SIGNUP():
                     usernameMain.delete(0,'end')
                     passwordMain.delete(0,'end')                                
                     con.commit()
+                    lastid = cur.lastrowid
+                    if tree:
+                        tree.insert('',tk.END,values=(lastid,WEBSITE,USERNAME,PASSWORD))
                 else:
                     messagebox.showwarning("Missing Info","Please fill all fields")
                  
@@ -141,7 +147,10 @@ def LOGIN():
         user = username_entry.get()
         passkey = password_entry.get()
 
-        def Viewer():            
+        def Viewer():    
+            global tree
+            if tree is not None:
+                return        
             con = sql.connect('Passwords.db')
             cur = con.cursor()
             cur.execute(f"SELECT * FROM {user}")
@@ -187,6 +196,9 @@ def LOGIN():
                     usernameMain.delete(0,'end')
                     passwordMain.delete(0,'end')                                
                     con.commit()
+                    lastid = cur.lastrowid
+                    if tree:
+                        tree.insert('',tk.END,values=(lastid,WEBSITE,USERNAME,PASSWORD))                    
                 else:
                     messagebox.showwarning("Missing Info","Please fill all fields")
     

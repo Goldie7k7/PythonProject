@@ -13,11 +13,80 @@ password BLOB NOT NULL)''')
 
 
 main = tk.Tk()
+tree = None
 
 def SIGNUP():
     def signupverify():
         user = username_entry.get()
         passkey = password_entry.get()
+       
+        def Viewer():
+            global tree
+            if tree is not None:
+                return
+            con = sql.connect('Passwords.db')
+            cur = con.cursor()
+            cur.execute(f"SELECT * FROM {user}")
+            rows = cur.fetchall()
+
+            tree = ttk.Treeview(table,columns=('ID','Website','Username','Password'),show='headings')
+            tree.heading('ID',text='ID')
+            tree.heading('Website',text='Website')
+            tree.heading('Username',text='Username')
+            tree.heading('Password',text='Password')
+
+            for row in rows:
+                tree.insert('',tk.END,values=row)
+            tree.pack(fill='both',expand=True)             
+
+        def newPASS():
+            con = sql.connect('Passwords.db')
+            cur = con.cursor()
+            website = tk.Entry(table)
+            web = tk.Label(table,text="Website:")
+            web.pack()            
+            website.pack()
+            userNAME = tk.Label(table,text="Username:")
+            usernameMain = tk.Entry(table)
+            userNAME.pack()
+            usernameMain.pack()
+            passWORD = tk.Label(table,text="Password:")
+            passwordMain = tk.Entry(table)
+            passWORD.pack()
+            passwordMain.pack()
+
+
+            def submit():
+                WEBSITE = website.get()
+                USERNAME = usernameMain.get()
+                PASSWORD = passwordMain.get()
+
+                if WEBSITE and USERNAME and PASSWORD:
+                    cur.execute(f'''INSERT INTO {user}
+                                (website,username,password)
+                                    VALUES(?,?,?)''',(WEBSITE,USERNAME,PASSWORD))
+                    website.delete(0,'end')
+                    usernameMain.delete(0,'end')
+                    passwordMain.delete(0,'end')                                
+                    con.commit()
+                    lastid = cur.lastrowid
+                    if tree:
+                        tree.insert('',tk.END,values=(lastid,WEBSITE,USERNAME,PASSWORD))
+                else:
+                    messagebox.showwarning("Missing Info","Please fill all fields")
+                 
+            
+
+            Submit = tk.Button(table,text="Submit",command=submit)
+            Submit.pack()
+            cur.execute(f'''
+                CREATE TABLE IF NOT EXISTS {user}(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                website TEXT NOT NULL,
+                username TEXT NOT NULL,
+                password TEXT NOT NULL
+            )''')
+
 
         if user == '' and passkey == '':
             messagebox.showerror('Error','Fields cannot be empty.')
@@ -29,14 +98,18 @@ def SIGNUP():
             table = tk.Tk()
             table.configure(bg='white')
             Data_Title = tk.Label(table,text="Your Data:",font=('Arial',30))
+            New_Entry = tk.Button(table,text="New",command=newPASS)
+            View = tk.Button(table,text="View",command=Viewer)
             Data_Title.pack()
+            New_Entry.pack()
+            View.pack()
 
             c.execute('''
             INSERT INTO users(username,password)
             VALUES(?,?)''',(user,passkey))
             conn.commit()
             conn.close()
-
+            table.mainloop()
 
         else:
             messagebox.showerror("Error",'Incorrect username or password')
@@ -68,26 +141,93 @@ def SIGNUP():
     button.pack(pady=20)
 
     window.mainloop()
-    
-
 
 def LOGIN():
     def loginverify():
         user = username_entry.get()
         passkey = password_entry.get()
 
-        if user == '' and passkey == '':
-            messagebox.showerror('Error','Fields cannot be empty.')
+        def Viewer():    
+            global tree
+            if tree is not None:
+                return        
+            con = sql.connect('Passwords.db')
+            cur = con.cursor()
+            cur.execute(f"SELECT * FROM {user}")
+            rows = cur.fetchall()
+
+            tree = ttk.Treeview(table,columns=('ID','Website','Username','Password'),show='headings')
+            tree.heading('ID',text='ID')
+            tree.heading('Website',text='Website')
+            tree.heading('Username',text='Username')
+            tree.heading('Password',text='Password')
+
+            for row in rows:
+                tree.insert('',tk.END,values=row)
+            tree.pack(fill='both',expand=True)  
+
+        def newPASS():
+            con = sql.connect('Passwords.db')
+            cur = con.cursor()
+            website = tk.Entry(table)
+            web = tk.Label(table,text="Website:")
+            web.pack()            
+            website.pack()
+            userNAME = tk.Label(table,text="Username:")
+            usernameMain = tk.Entry(table)
+            userNAME.pack()
+            usernameMain.pack()
+            passWORD = tk.Label(table,text="Password:")
+            passwordMain = tk.Entry(table)
+            passWORD.pack()
+            passwordMain.pack()
+
+
+            def submit():
+                WEBSITE = website.get()
+                USERNAME = usernameMain.get()
+                PASSWORD = passwordMain.get()
+
+                if WEBSITE and USERNAME and PASSWORD:
+                    cur.execute(f'''INSERT INTO {user}
+                                (website,username,password)
+                                    VALUES(?,?,?)''',(WEBSITE,USERNAME,PASSWORD))
+                    website.delete(0,'end')
+                    usernameMain.delete(0,'end')
+                    passwordMain.delete(0,'end')                                
+                    con.commit()
+                    if tree:
+                        tree.insert('',tk.END,values=(lastid,WEBSITE,USERNAME,PASSWORD))                    
+                else:
+                    messagebox.showwarning("Missing Info","Please fill all fields")
     
-        elif user == '1' and passkey == '1':
+
+            Submit = tk.Button(table,text="Submit",command=submit)
+            Submit.pack()
+            cur.execute(f'''
+                CREATE TABLE IF NOT EXISTS {user}(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                website TEXT NOT NULL,
+                username TEXT NOT NULL,
+                password TEXT NOT NULL
+            )''')
+
+        c.execute('SELECT 1 FROM users WHERE username = ? AND password = ? LIMIT 1', (user, passkey))
+        resultuser = c.fetchone() is not None
+
+
+        if resultuser:
             messagebox.showinfo('Login','Login was successful')
 
             window.destroy()
             table = tk.Tk()
             table.configure(bg='white')
             Data_Title = tk.Label(table,text="Your Data:",font=('Arial',30))
+            New_Entry = tk.Button(table,text="New",command=newPASS)
+            View = tk.Button(table,text="View",command=Viewer)
             Data_Title.pack()
-
+            New_Entry.pack()
+            View.pack()
         else:
             messagebox.showerror("Error",'Incorrect username or password')
     main.destroy()
