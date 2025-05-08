@@ -35,6 +35,15 @@ def SIGNUP():
             passwordMain = tk.Entry(table)
             passWORD.pack()
             passwordMain.pack()
+
+            def submit():
+                WEBSITE = website.get()
+                USERNAME = usernameMain.get()
+                PASSWORD = passwordMain.get()
+                cur.execute(f'''INSERT INTO {user}
+                            (website,username,password)
+                                VALUES(?,?,?)''',(WEBSITE,USERNAME,PASSWORD))            
+
             Submit = tk.Button(table,text="Submit",command=submit)
             Submit.pack()
             cur.execute(f'''
