@@ -19,6 +19,22 @@ def SIGNUP():
     def signupverify():
         user = username_entry.get()
         passkey = password_entry.get()
+       
+        def Viewer():
+            con = sql.connect('Passwords.db')
+            cur = con.cursor()
+            cur.execute(f"SELECT * FROM {user}")
+            rows = cur.fetchall()
+
+            tree = ttk.Treeview(table,columns=('ID','Website','Username','Password'),show='headings')
+            tree.heading('ID',text='ID')
+            tree.heading('Website',text='Website')
+            tree.heading('Username',text='Username')
+            tree.heading('Password',text='Password')
+
+            for row in rows:
+                tree.insert('',tk.END,values=row)
+            tree.pack(fill='both',expand=True)             
 
         def newPASS():
             con = sql.connect('Passwords.db')
@@ -36,6 +52,7 @@ def SIGNUP():
             passWORD.pack()
             passwordMain.pack()
 
+
             def submit():
                 WEBSITE = website.get()
                 USERNAME = usernameMain.get()
@@ -47,7 +64,8 @@ def SIGNUP():
                 usernameMain.delete(0,'end')
                 passwordMain.delete(0,'end')                                
                 con.commit()
-                con.close()            
+                con.close()    
+            
 
             Submit = tk.Button(table,text="Submit",command=submit)
             Submit.pack()
@@ -58,6 +76,7 @@ def SIGNUP():
                 username TEXT NOT NULL,
                 password TEXT NOT NULL
             )''')
+
 
         if user == '' and passkey == '':
             messagebox.showerror('Error','Fields cannot be empty.')
@@ -70,7 +89,7 @@ def SIGNUP():
             table.configure(bg='white')
             Data_Title = tk.Label(table,text="Your Data:",font=('Arial',30))
             New_Entry = tk.Button(table,text="New",command=newPASS)
-            View = tk.Button(table,text="View")
+            View = tk.Button(table,text="View",command=Viewer)
             Data_Title.pack()
             New_Entry.pack()
             View.pack()
@@ -118,6 +137,22 @@ def LOGIN():
         user = username_entry.get()
         passkey = password_entry.get()
 
+        def Viewer():            
+            con = sql.connect('Passwords.db')
+            cur = con.cursor()
+            cur.execute(f"SELECT * FROM {user}")
+            rows = cur.fetchall()
+
+            tree = ttk.Treeview(table,columns=('ID','Website','Username','Password'),show='headings')
+            tree.heading('ID',text='ID')
+            tree.heading('Website',text='Website')
+            tree.heading('Username',text='Username')
+            tree.heading('Password',text='Password')
+
+            for row in rows:
+                tree.insert('',tk.END,values=row)
+            tree.pack(fill='both',expand=True)  
+
         def newPASS():
             con = sql.connect('Passwords.db')
             cur = con.cursor()
@@ -134,9 +169,19 @@ def LOGIN():
             passWORD.pack()
             passwordMain.pack()
 
+
             def submit():
-                cur.execute('''INSERT INTO {user}(website,username,password)
-                                VALUES(?,?,?)''',())
+                WEBSITE = website.get()
+                USERNAME = usernameMain.get()
+                PASSWORD = passwordMain.get()
+                cur.execute(f'''INSERT INTO {user}
+                            (website,username,password)
+                                VALUES(?,?,?)''',(WEBSITE,USERNAME,PASSWORD))
+                website.delete(0,'end')
+                usernameMain.delete(0,'end')
+                passwordMain.delete(0,'end')                                
+                con.commit()
+                con.close()    
 
             Submit = tk.Button(table,text="Submit",command=submit)
             Submit.pack()
@@ -160,7 +205,7 @@ def LOGIN():
             table.configure(bg='white')
             Data_Title = tk.Label(table,text="Your Data:",font=('Arial',30))
             New_Entry = tk.Button(table,text="New",command=newPASS)
-            View = tk.Button(table,text="View")
+            View = tk.Button(table,text="View",command=Viewer)
             Data_Title.pack()
             New_Entry.pack()
             View.pack()
