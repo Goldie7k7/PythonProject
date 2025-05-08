@@ -30,6 +30,10 @@ def SIGNUP():
                 username TEXT NOT NULL,
                 password TEXT NOT NULL
             )''')
+            website = tk.Entry(table)
+            website.pack()
+            passwordMain = tk.Entry(table)
+            passwordMain.pack()
 
         if user == '' and passkey == '':
             messagebox.showerror('Error','Fields cannot be empty.')
