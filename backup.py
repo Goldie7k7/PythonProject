@@ -196,6 +196,7 @@ def LOGIN():
                     usernameMain.delete(0,'end')
                     passwordMain.delete(0,'end')                                
                     con.commit()
+                    lastid = cur.lastrowid
                     if tree:
                         tree.insert('',tk.END,values=(lastid,WEBSITE,USERNAME,PASSWORD))                    
                 else:
